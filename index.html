@@ -88,12 +88,12 @@
                 document.body.innerHTML = `
                     <div class="container">
                         <h1>🔬 تم فك التشفير</h1>
-                        <p>📍 الموقع: القاعة الكبرى</p>
-                        <p>⏰ الوقت: 09:00 مساءً</p>
+                        <p>📍 الموقع: معمل الفيزياء</p>
+                        <p>⏰ الوقت:يوم الاحد </p>
                         <button onclick="location.reload()">خروج</button>
                     </div>`;
             } else {
-                resultText.innerText = "❌ محاولة فاشلة!";
+                resultText.innerText = " ❌ محاولة فاشلة! حاول مره اخرى";
                 resultText.style.color = "red";
                 document.querySelector(".container").classList.add("error-shake");
                 setTimeout(() => document.querySelector(".container").classList.remove("error-shake"), 400);
