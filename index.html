@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ACCESS RESTRICTED</title>
+    <title>ACCESS SYSTEM</title>
     <style>
         body {
-            background-color: #0a0a0a;
+            background: #000;
             color: #00ffcc;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: monospace;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -17,29 +17,43 @@
             overflow: hidden;
         }
         .container {
-            border: 1px solid #00ffcc;
+            border: 2px solid #00ffcc;
             padding: 30px;
             background: rgba(0, 255, 204, 0.05);
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
-            border-radius: 10px;
-            width: 90%;
+            box-shadow: 0 0 20px #00ffcc;
+            border-radius: 15px;
+            width: 85%;
             max-width: 400px;
             text-align: center;
+            z-index: 10;
         }
-        .glitch { animation: flash 1.5s infinite; font-size: 1.5rem; }
-        @keyframes flash { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         input {
-            padding: 12px; font-size: 16px; width: 100%; background: #111;
-            border: 1px solid #00ffcc; color: #00ffcc; outline: none;
-            box-sizing: border-box; text-align: center; margin-top: 20px;
+            padding: 15px;
+            font-size: 16px; /* ضروري لظهور الكيبورد في الجوال */
+            width: 100%;
+            background: #111;
+            border: 2px solid #00ffcc;
+            color: #00ffcc;
+            margin-top: 20px;
+            box-sizing: border-box;
+            border-radius: 8px;
+            outline: none;
+            position: relative;
+            z-index: 100; /* يضمن أنها فوق كل شيء */
+            -webkit-user-select: text;
         }
         button {
-            margin-top: 15px; padding: 12px; width: 100%;
-            background-color: #00ffcc; color: #000; border: none;
-            font-weight: bold; cursor: pointer;
+            margin-top: 15px;
+            padding: 12px;
+            width: 100%;
+            background: #00ffcc;
+            color: #000;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 8px;
         }
-        #result { margin-top: 20px; font-weight: bold; }
-        .error-shake { animation: shake 0.4s; }
+        .error-shake { animation: shake 0.4s; border-color: red; }
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-10px); }
@@ -48,13 +62,12 @@
     </style>
 </head>
 <body>
-
     <div class="container">
-        <h1 class="glitch">⚠️ ACCESS RESTRICTED</h1>
+        <h1 style="font-size: 1.4rem;">⚠️ ACCESS RESTRICTED</h1>
         <p>أنا عنصر لا أرى بالعين المجردة، وبدوني لا تعيش الكائنات… من أنا؟</p>
-        <input type="text" id="answer" placeholder="اكتبي الإجابة هنا...">
-        <button onclick="checkAnswer()">تأكيد الهوية</button>
-        <p id="result"></p>
+        <input type="text" id="answer" placeholder="اكتبي الإجابة هنا..." autofocus>
+        <button onclick="checkAnswer()">دخول</button>
+        <p id="result" style="margin-top: 15px;"></p>
     </div>
 
     <script>
@@ -72,19 +85,16 @@
             const validAnswers = ["اكسجين", "oxygen", "o2", "o"];
 
             if (validAnswers.some(word => ans.includes(word))) {
-                new Audio("https://www.soundjay.com/buttons/sounds/button-3.mp3").play();
                 document.body.innerHTML = `
                     <div class="container">
                         <h1>🔬 تم فك التشفير</h1>
-                        <hr style="border: 0.5px solid #00ffcc">
                         <p>📍 الموقع: القاعة الكبرى</p>
                         <p>⏰ الوقت: 09:00 مساءً</p>
                         <button onclick="location.reload()">خروج</button>
                     </div>`;
             } else {
-                new Audio("https://www.soundjay.com/buttons/sounds/button-10.mp3").play();
-                resultText.innerText = "❌ الوصول مرفوض!";
-                resultText.style.color = "#ff4444";
+                resultText.innerText = "❌ محاولة فاشلة!";
+                resultText.style.color = "red";
                 document.querySelector(".container").classList.add("error-shake");
                 setTimeout(() => document.querySelector(".container").classList.remove("error-shake"), 400);
             }
