@@ -2,13 +2,14 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ACCESS SYSTEM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SYSTEM CORE ACCESS</title>
     <style>
+        /* تصميم الخلفية والأنوار */
         body {
-            background: #000;
-            color: #00ffcc;
-            font-family: monospace;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -16,44 +17,82 @@
             margin: 0;
             overflow: hidden;
         }
+
         .container {
             border: 2px solid #00ffcc;
             padding: 30px;
             background: rgba(0, 255, 204, 0.05);
-            box-shadow: 0 0 20px #00ffcc;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
             border-radius: 15px;
             width: 85%;
             max-width: 400px;
             text-align: center;
             z-index: 10;
+            transition: all 0.3s ease;
         }
+
+        /* تأثير العنوان المتوهج */
+        .glitch {
+            font-size: 1.5rem;
+            text-shadow: 0 0 10px #00ffcc;
+            animation: pulse 2s infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.98); }
+        }
+
+        /* مدخل الإجابة - محسن للجوال */
         input {
             padding: 15px;
-            font-size: 16px; /* ضروري لظهور الكيبورد في الجوال */
+            font-size: 16px; /* ضروري لفتح الكيبورد في iOS دون زووم */
             width: 100%;
-            background: #111;
-            border: 2px solid #00ffcc;
+            background: #000;
+            border: 2px solid #00cccc;
             color: #00ffcc;
             margin-top: 20px;
             box-sizing: border-box;
             border-radius: 8px;
             outline: none;
             position: relative;
-            z-index: 100; /* يضمن أنها فوق كل شيء */
-            -webkit-user-select: text;
+            z-index: 100;
+            text-align: center;
+            -webkit-user-select: text; /* لضمان قابلية الكتابة */
         }
+
+        input:focus {
+            border-color: #00ffcc;
+            box-shadow: 0 0 15px #00ffcc;
+        }
+
         button {
-            margin-top: 15px;
-            padding: 12px;
+            margin-top: 20px;
+            padding: 15px;
             width: 100%;
             background: #00ffcc;
             color: #000;
             border: none;
             font-weight: bold;
+            font-size: 1.1rem;
             cursor: pointer;
             border-radius: 8px;
+            transition: 0.3s;
         }
-        .error-shake { animation: shake 0.4s; border-color: red; }
+
+        button:active { transform: scale(0.95); }
+
+        #result { margin-top: 20px; font-weight: bold; min-height: 24px; }
+
+        /* تأثير الاهتزاز عند الخطأ */
+        .error-shake {
+            animation: shake 0.4s;
+            border-color: #ff4444 !important;
+            box-shadow: 0 0 30px #ff4444 !important;
+        }
+
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-10px); }
@@ -62,43 +101,16 @@
     </style>
 </head>
 <body>
+
     <div class="container">
-        <h1 style="font-size: 1.4rem;">⚠️ ACCESS RESTRICTED</h1>
+        <h1 class="glitch">⚠️ ACCESS RESTRICTED</h1>
         <p>أنا عنصر لا أرى بالعين المجردة، وبدوني لا تعيش الكائنات… من أنا؟</p>
-        <input type="text" id="answer" placeholder="اكتبي الإجابة هنا..." autofocus>
-        <button onclick="checkAnswer()">دخول</button>
-        <p id="result" style="margin-top: 15px;"></p>
+        <input type="text" id="answer" placeholder="اكتبي الإجابة هنا..." autocomplete="off">
+        <button onclick="checkAnswer()">تأكيد الهوية</button>
+        <p id="result"></p>
     </div>
 
     <script>
         function normalize(text) {
             return text.trim().toLowerCase()
-                .replace(/[أإآ]/g, "ا")
-                .replace(/^ال/, "")
-                .replace(/\s+/g, "");
-        }
-
-        function checkAnswer() {
-            const inputField = document.getElementById("answer");
-            const resultText = document.getElementById("result");
-            const ans = normalize(inputField.value);
-            const validAnswers = ["اكسجين", "oxygen", "o2", "o"];
-
-            if (validAnswers.some(word => ans.includes(word))) {
-                document.body.innerHTML = `
-                    <div class="container">
-                        <h1>🔬 تم فك التشفير</h1>
-                        <p>📍 الموقع: معمل الفيزياء</p>
-                        <p>⏰ الوقت:يوم الاحد </p>
-                        <button onclick="location.reload()">خروج</button>
-                    </div>`;
-            } else {
-                resultText.innerText = " ❌ محاولة فاشلة! حاول مره اخرى";
-                resultText.style.color = "red";
-                document.querySelector(".container").classList.add("error-shake");
-                setTimeout(() => document.querySelector(".container").classList.remove("error-shake"), 400);
-            }
-        }
-    </script>
-</body>
-</html>
+                .replace(/[أ
