@@ -3,114 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM CORE ACCESS</title>
+    <title>DORZA SYSTEM</title>
     <style>
-        /* تصميم الخلفية والأنوار */
-        body {
-            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
-            color: #fff;
-            font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-        }
-
-        .container {
-            border: 2px solid #00ffcc;
-            padding: 30px;
-            background: rgba(0, 255, 204, 0.05);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
-            border-radius: 15px;
-            width: 85%;
-            max-width: 400px;
-            text-align: center;
-            z-index: 10;
-            transition: all 0.3s ease;
-        }
-
-        /* تأثير العنوان المتوهج */
-        .glitch {
-            font-size: 1.5rem;
-            text-shadow: 0 0 10px #00ffcc;
-            animation: pulse 2s infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(0.98); }
-        }
-
-        /* مدخل الإجابة - محسن للجوال */
-        input {
-            padding: 15px;
-            font-size: 16px; /* ضروري لفتح الكيبورد في iOS دون زووم */
-            width: 100%;
-            background: #000;
-            border: 2px solid #00cccc;
-            color: #00ffcc;
-            margin-top: 20px;
-            box-sizing: border-box;
-            border-radius: 8px;
-            outline: none;
-            position: relative;
-            z-index: 100;
-            text-align: center;
-            -webkit-user-select: text; /* لضمان قابلية الكتابة */
-        }
-
-        input:focus {
-            border-color: #00ffcc;
-            box-shadow: 0 0 15px #00ffcc;
-        }
-
-        button {
-            margin-top: 20px;
-            padding: 15px;
-            width: 100%;
-            background: #00ffcc;
-            color: #000;
-            border: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: 0.3s;
-        }
-
-        button:active { transform: scale(0.95); }
-
-        #result { margin-top: 20px; font-weight: bold; min-height: 24px; }
-
-        /* تأثير الاهتزاز عند الخطأ */
-        .error-shake {
-            animation: shake 0.4s;
-            border-color: #ff4444 !important;
-            box-shadow: 0 0 30px #ff4444 !important;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
+        body { background: #000; color: #00ffcc; font-family: monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
+        .container { border: 2px solid #00ffcc; padding: 30px; background: rgba(0, 255, 204, 0.05); border-radius: 15px; width: 85%; max-width: 400px; text-align: center; }
+        input { padding: 15px; font-size: 16px; width: 100%; background: #000; border: 2px solid #00cccc; color: #00ffcc; margin-top: 20px; box-sizing: border-box; border-radius: 8px; outline: none; text-align: center; }
+        button { margin-top: 20px; padding: 15px; width: 100%; background: #00ffcc; color: #000; border: none; font-weight: bold; cursor: pointer; border-radius: 8px; }
+        .error { color: #ff4444; margin-top: 15px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1 class="glitch">⚠️ ACCESS RESTRICTED</h1>
+    <div class="container" id="box">
+        <h1>⚠️ نظام Dorza</h1>
         <p>أنا عنصر لا أرى بالعين المجردة، وبدوني لا تعيش الكائنات… من أنا؟</p>
-        <input type="text" id="answer" placeholder="اكتبي الإجابة هنا..." autocomplete="off">
-        <button onclick="checkAnswer()">تأكيد الهوية</button>
-        <p id="result"></p>
+        <input type="text" id="userInp" placeholder="اكتبي هنا...">
+        <button onclick="startCheck()">تأكيد</button>
+        <p id="msg" class="error"></p>
     </div>
 
     <script>
-        function normalize(text) {
-            return text.trim().toLowerCase()
-                .replace(/[أ
+        function startCheck() {
+            const val = document.getElementById("userInp").value.trim().toLowerCase();
+            const msg = document.getElementById("msg");
+            
+            // تنظيف الإجابة من الهمزات وال التعريف
+            const cleanVal = val.replace(/[أإآ]/g, "ا").replace(/^ال/, "");
+
+            if (cleanVal === "اكسجين" || cleanVal === "oxygen") {
+                document.getElementById("box").innerHTML = `
+                    <h1>🔬 تم التحقق</h1>
+                    <hr style="border:1px solid #00ffcc">
+                    <p>📍 الموقع: معمل الفيزياء </p>
+                    <p>⏰ الوقت:يوم الاثنين الحصة الثانيه</p>
+                `;
+            } else {
+                msg.innerText = "❌ إجابة خاطئة!";
+                setTimeout(() => { msg.innerText = ""; }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
