@@ -3,43 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DORZA SYSTEM</title>
+    <title>CORE_ACCESS_DENIED</title>
     <style>
-        body { background: #000; color: #00ffcc; font-family: monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
-        .container { border: 2px solid #00ffcc; padding: 30px; background: rgba(0, 255, 204, 0.05); border-radius: 15px; width: 85%; max-width: 400px; text-align: center; }
-        input { padding: 15px; font-size: 16px; width: 100%; background: #000; border: 2px solid #00cccc; color: #00ffcc; margin-top: 20px; box-sizing: border-box; border-radius: 8px; outline: none; text-align: center; }
-        button { margin-top: 20px; padding: 15px; width: 100%; background: #00ffcc; color: #000; border: none; font-weight: bold; cursor: pointer; border-radius: 8px; }
-        .error { color: #ff4444; margin-top: 15px; font-weight: bold; }
+        body {
+            background: #000;
+            color: #00ffcc;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            /* تأثير خطوط الشاشة القديمة (Scanlines) */
+            background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+        }
+
+        /* تأثير الوميض الأحمر في الخلفية عند الخطأ */
+        .bg-error {
+            animation: bg-red 0.5s infinite;
+        }
+        @keyframes bg-red { 0% { background: #000; } 50% { background: #200; } 100% { background: #000; } }
+
+        .container {
+            border: 1px solid #00ffcc;
+            padding: 40px;
+            background: rgba(0, 255, 204, 0.02);
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.2), inset 0 0 10px rgba(0, 255, 204, 0.1);
+            border-radius: 5px;
+            width: 85%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+        }
+
+        /* تأثير النص "المخترق" */
+        .glitch-title {
+            font-size: 1.6rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 25px;
+            position: relative;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        input {
+            padding: 15px;
+            font-size: 18px;
+            width: 100%;
+            background: rgba(0, 255, 204, 0.05);
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            margin-top: 20px;
+            box-sizing: border-box;
+            outline: none;
+            text-align: center;
+            box-shadow: inset 0 0 5px #00ffcc;
+        }
+
+        button {
+            margin-top: 25px;
+            padding: 15px;
+            width: 100%;
+            background: transparent;
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+        button:hover { background: #00ffcc; color: #000; box-shadow: 0 0 20px #00ffcc; }
+
+        .shake { animation: shake 0.3s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-15px); } 40% { transform: translateX(15px); } 60% { transform: translateX(-15px); } 80% { transform: translateX(15px); } }
+
+        /* شاشة النجاح الرقمية */
+        .success-box {
+            border: 2px solid #fff;
+            padding: 20px;
+            background: #00ffcc;
+            color: #000;
+            font-weight: bold;
+            animation: zoom-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes zoom-in { 0% { transform: scale(0); } 100% { transform: scale(1); } }
     </style>
 </head>
-<body>
+<body id="mainBody">
 
-    <div class="container" id="box">
-        <h1>⚠️ نظام Dorza</h1>
-        <p>أنا عنصر لا أرى بالعين المجردة، وبدوني لا تعيش الكائنات… من أنا؟</p>
-        <input type="text" id="userInp" placeholder="اكتبي هنا...">
-        <button onclick="startCheck()">تأكيد</button>
-        <p id="msg" class="error"></p>
+    <div class="container" id="contentBox">
+        <div class="glitch-title">SYSTEM HALT</div>
+        <p style="font-size: 0.9rem; color: #88ffed;">[دخول غير مصرح به.. مطلوب رمز الهوية]</p>
+        <p style="margin-top: 20px;">عنصر لا يرى بالعين، وبدونه لا تعيش الكائنات.. من أنا؟</p>
+        
+        <input type="text" id="userInput" placeholder="ENTER_CODE" autocomplete="off">
+        <button onclick="verify()">إرسال الأمر</button>
+        <p id="feedback" style="margin-top: 15px; font-weight: bold; color: #ff4444;"></p>
     </div>
 
     <script>
-        function startCheck() {
-            const val = document.getElementById("userInp").value.trim().toLowerCase();
-            const msg = document.getElementById("msg");
-            
-            // تنظيف الإجابة من الهمزات وال التعريف
-            const cleanVal = val.replace(/[أإآ]/g, "ا").replace(/^ال/, "");
+        function verify() {
+            const val = document.getElementById("userInput").value.trim().toLowerCase();
+            const box = document.getElementById("contentBox");
+            const body = document.getElementById("mainBody");
+            const feedback = document.getElementById("feedback");
 
-            if (cleanVal === "اكسجين" || cleanVal === "oxygen") {
-                document.getElementById("box").innerHTML = `
-                    <h1>🔬 تم التحقق</h1>
-                    <hr style="border:1px solid #00ffcc">
-                    <p>📍 الموقع: معمل الفيزياء </p>
-                    <p>⏰ الوقت:يوم الاثنين الحصة الثانيه</p>
+            // تنظيف النص
+            const clean = val.replace(/[أإآ]/g, "ا").replace(/^ال/, "");
+
+            if (clean === "اكسجين" || clean === "oxygen") {
+                // صوت نجاح تقني
+                new Audio("https://www.soundjay.com/buttons/sounds/button-3.mp3").play();
+                
+                box.innerHTML = `
+                    <div class="success-box">
+                        <h2>ACCESS GRANTED</h2>
+                        <hr style="border: 1px solid #000">
+                        <p>📍 الموقع: معمل الفيزياء</p>
+                        <p>⏰ الوقت:يوم الاثنين ، الحصة الثانيه</p>
+                    </div>
                 `;
+                body.style.background = "#002b24"; // تغيير لون الخلفية للنجاح
             } else {
-                msg.innerText = "❌ إجابة خاطئة!";
-                setTimeout(() => { msg.innerText = ""; }, 2000);
+                // صوت خطأ وتحذير
+                new Audio("https://www.soundjay.com/buttons/sounds/button-10.mp3").play();
+                feedback.innerText = "!! خطأ في التشفير !!";
+                box.classList.add("shake");
+                body.classList.add("bg-error");
+                
+                setTimeout(() => {
+                    box.classList.remove("shake");
+                    body.classList.remove("bg-error");
+                    feedback.innerText = "";
+                }, 1000);
             }
         }
     </script>
